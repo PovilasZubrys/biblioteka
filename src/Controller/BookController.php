@@ -111,12 +111,7 @@ class BookController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $submittedToken = $r->request->get('token');
 
-        if (!$this->isCsrfTokenValid('create_author', $submittedToken)) {
-            $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
-            return $this->redirectToRoute('author_create');
-        }
 
         $book = $this->getDoctrine()
         ->getRepository(Book::class)
@@ -139,6 +134,13 @@ class BookController extends AbstractController
     {  
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $submittedToken = $r->request->get('token');
+
+        if (!$this->isCsrfTokenValid('create_author', $submittedToken)) {
+            $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
+            return $this->redirectToRoute('author_create');
+        }
+        
         $book = $this->getDoctrine()
         ->getRepository(Book::class)
         ->find($id);

@@ -105,13 +105,6 @@ class AuthorController extends AbstractController
     public function edit(int $id, Request $r): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $submittedToken = $r->request->get('token');
-
-        if (!$this->isCsrfTokenValid('create_author', $submittedToken)) {
-            $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
-            return $this->redirectToRoute('author_create');
-        }
         
         $author = $this->getDoctrine()
         ->getRepository(Author::class)
@@ -121,7 +114,6 @@ class AuthorController extends AbstractController
         $author_surname = $r->getSession()->getFlashBag()->get('author_surname', []);
 
         $r->getSession()->getFlashBag()->add('success', 'Autorius buvo sekmingai paredaguotas.');
-
 
         return $this->render('author/edit.html.twig', [
             'author' => $author,
@@ -135,6 +127,13 @@ class AuthorController extends AbstractController
     public function update(Request $r, $id, ValidatorInterface $validator): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $submittedToken = $r->request->get('token');
+
+        if (!$this->isCsrfTokenValid('create_author', $submittedToken)) {
+            $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
+            return $this->redirectToRoute('author_create');
+        }
 
         $author = $this->getDoctrine()
         ->getRepository(Author::class)
