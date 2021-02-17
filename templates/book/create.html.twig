@@ -37,7 +37,6 @@
                         <div class="form-group">
                             <select name="book_author_id" class="form-control">
                                 <option value="0">Pasirink autoriu</option>
-
                                 {% for author in authors %}
                                     <option value="{{author.id}}">{{author.name}} {{author.surname}}</option>
                                 {% endfor %}
