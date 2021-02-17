@@ -38,6 +38,7 @@ class AuthorController extends AbstractController
         return $this->render('author/index.html.twig', [
             'authors' => $authors,
             'sortBy' => $r->query->get('sort') ?? 'default',
+            'errors' => $r->getSession()->getFlashBag()->get('errors', []),
             'success' => $r->getSession()->getFlashBag()->get('success', [])
         ]);
     }
@@ -132,7 +133,7 @@ class AuthorController extends AbstractController
 
         if (!$this->isCsrfTokenValid('create_author', $submittedToken)) {
             $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
-            return $this->redirectToRoute('author_create');
+            return $this->redirectToRoute('author_index');
         }
 
         $author = $this->getDoctrine()
@@ -169,7 +170,7 @@ class AuthorController extends AbstractController
 
     
     #[Route('/author/delete/{id}', name: 'author_delete', methods: ['POST'])]
-    public function delete($id): Response
+    public function delete(Request $r, $id): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -179,7 +180,8 @@ class AuthorController extends AbstractController
 
 
         if ($author->getBooks()->count() > 0) {
-            return new Response('Trinti negalima nes turi knygu');
+            $r->getSession()->getFlashBag()->add('errors', 'Trinti negalima, nes turi knygų');
+            return $this->redirectToRoute('author_index');
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -187,6 +189,5 @@ class AuthorController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('author_index');
-
     }
 }

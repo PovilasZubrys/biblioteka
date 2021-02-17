@@ -33,13 +33,9 @@
 							{% for author in authors %}
 								<li class="list-group-item">
 									<div class="list-group-item__line">
-										<span>
-											{{author.name}}
-											{{author.surname}}
-										</span>
+										<span>{{author.name}} {{author.surname}}</span>
 										<div class="list-group-item__line__buttons">
 											<a href="{{ path('author_edit', {id: author.id}) }}" class="btn btn-success">Redaguoti</a>
-
 											<form action="{{ path('author_delete', {id: author.id}) }}" method="POST">
 												<button type="submit" class="btn btn-danger">Trinti</button>
 											</form>
@@ -48,13 +44,13 @@
 									<h6>
 										<span class="badge badge-secondary">Autoriaus knygos</span>
 									</h6>
-									<ul class="list-group">
-										<li class="list-group-item">
+									<div class="list-group">
+										<ol class="list-group-item">
 											{% for book in author.books %}
-												{{book.title}}
+												<li>{{book.title}}</li>
 											{% endfor %}
-										</li>
-									</ul>
+										</ol>
+									</div>
 								</li>
 							{% endfor %}
 						</ul>
