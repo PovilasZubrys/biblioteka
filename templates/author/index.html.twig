@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Autorių sąrašas{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-header">
+						<h1>Autoriai bibliotekoje</h1>
+					</div>
+
+					<div class="card-body">
+						Rūšiuoti pagal:
+						<form action="{{ path('author_index') }}" method="GET" class="sort-form">
+							<div class="form-group">
+								<select name="sort" class="form-control">
+
+									<option value="default">default</option>
+									<option value="name_az" {% if sortBy == 'name_az' %} selected {% endif %}>Vardą - az</option>
+									<option value="name_za" {% if sortBy == 'name_za' %} selected {% endif %}>Vardą - za</option>
+									<option value="surname_az" {% if sortBy == 'surname_az' %} selected {% endif %}>Pavardę - az</option>
+									<option value="surname_za" {% if sortBy == 'surname_za' %} selected {% endif %}>Pavardę - za</option>
+
+								</select>
+							</div>
+							<button type="submit" class="btn btn-dark">Rūšiuoti</button>
+							<a href="{{ path('author_index') }}" class="clear">Išvalyti rūšiavimą</a>
+						</form>
+						<ul class="list-group">
+							{% for author in authors %}
+								<li class="list-group-item">
+									<div class="list-group-item__line">
+										<span>
+											{{author.name}}
+											{{author.surname}}
+										</span>
+										<div class="list-group-item__line__buttons">
+											<a href="{{ path('author_edit', {id: author.id}) }}" class="btn btn-success">Redaguoti</a>
+
+											<form action="{{ path('author_delete', {id: author.id}) }}" method="POST">
+												<button type="submit" class="btn btn-danger">Trinti</button>
+											</form>
+										</div>
+									</div>
+									<h6>
+										<span class="badge badge-secondary">Autoriaus knygos</span>
+									</h6>
+									<ul class="list-group">
+										<li class="list-group-item">
+											{% for book in author.books %}
+												{{book.title}}
+											{% endfor %}
+										</li>
+									</ul>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

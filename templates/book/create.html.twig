@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pridėti naują knygą{% endblock %}
+
+{% block body %}
+
+<div class="container">
+   <div class="row justify-content-center">
+       <div class="col-md-8">
+           <div class="card">
+               <div class="card-header"><h1>Pridėti naują knygą</h1></div>
+
+               <div class="card-body">
+                    <form action="{{path('book_store')}}" method="POST">
+
+                        <div class="form-group">
+                            <label>Pavadinimas:</label>
+                            <input type="text" class="form-control" name="book_title">
+                            <small class="form-text text-muted">Knygos pavadinimas</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>ISBN:</label>
+                            <input type="text" class="form-control" name="book_isbn">
+                            <small class="form-text text-muted">Knygos ISBN Code</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Puslapių skaičius:</label>
+                            <input type="text" class="form-control" name="book_pages">
+                            <small class="form-text text-muted">Puslapių skaičius</small>
+                        </div>    
+
+                        <div class="form-group">
+                            Trumpas aprašymas:<textarea name="book_short_description" id="summernote"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <select name="book_author_id" class="form-control">
+                                <option value="0">Pasirink autoriu</option>
+
+                                {% for author in authors %}
+                                    <option value="{{author.id}}">{{author.name}} {{author.surname}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark">Pridėti knygą</button>
+                        <input type="hidden" name="token" value="{{ csrf_token('create_author') }}"/>
+                    </form>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+{% endblock %}

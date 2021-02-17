@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sukurti naują autorių{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header"><h1>Sukurti naują autorių</h1></div>
+
+                <div class="card-body">
+                     <form action="{{path('author_store')}}" method="POST">
+                        
+
+                        <div class="form-group">
+                            <label>Vardas</label>
+                            <input type="text" class="form-control" name="author_name" value="{{ author_name }}">
+                            <small class="form-text text-muted">Autoriaus vardas</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pavardė:</label>
+                            <input type="text" class="form-control" name="author_surname" value="{{ author_surname }}">
+                            <small class="form-text text-muted">Autoriaus pavarde</small>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Pridėti naują autorių</button>
+                        
+                        <input type="hidden" name="token" value="{{ csrf_token('create_author') }}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
