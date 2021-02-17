@@ -27,6 +27,11 @@ class Book
      * minMessage = "Vardas per trumpas, turi buti bent {{ limit }} ilgio",
      * maxMessage = "Vardas per ilgas, maksimalus ilgis {{ limit }}"
      * )
+     * @Assert\Regex(
+     * pattern     = "/^[a-z]+/i",
+     * htmlPattern = "^[a-zA-Z]+",
+     * message = "Pavadinime negali būti simbolių" 
+     * )
      */
     private $title;
 
@@ -38,6 +43,11 @@ class Book
      * max = 10,
      * minMessage = "Puslapių skaičius turi būti bent {{ limit }} ilgio",
      * maxMessage = "Puslapių skaičiaus maksimalus ilgis {{ limit }}"
+     * )
+     * @Assert\Regex(
+     * pattern     = "/^[a-z]+/i",
+     * htmlPattern = "^[a-zA-Z]+",
+     * message = "Pavadinime negali būti simbolių" 
      * )
      */
     private $pages;

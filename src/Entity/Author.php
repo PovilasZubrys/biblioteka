@@ -29,6 +29,11 @@ class Author
      * minMessage = "Vardas per trumpas, turi buti bent {{ limit }} ilgio",
      * maxMessage = "Vardas per ilgas, maksimalus ilgis {{ limit }}"
      * )
+     *@Assert\Regex(
+     * pattern     = "/^[a-z]+/i",
+     * htmlPattern = "^[a-zA-Z]+",
+     * message = "Vardas negali turėti simbolių" 
+     * )
      */
     private $name;
 
@@ -40,6 +45,12 @@ class Author
      * max = 64,
      * minMessage = "Pavarde per trumpa, turi buti bent {{ limit }} ilgio",
      * maxMessage = "Pavarde per ilga, maksimalus ilgis {{ limit }}"
+     * )
+     *@Assert\Regex(
+     * pattern     = "/^[a-z]+/i",
+     * htmlPattern = "^[a-zA-Z]+",
+     * message = "Pavardė negali turėti simbolių" 
+     * )
      * )
      */
     private $surname;

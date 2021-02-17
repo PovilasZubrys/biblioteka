@@ -35,6 +35,7 @@ class BookController extends AbstractController
         return $this->render('book/index.html.twig', [
             'books' => $books,
             'authors' => $authors,
+            'errors' => $r->getSession()->getFlashBag()->get('errors', []),
             'success' => $r->getSession()->getFlashBag()->get('success', []),
             'authorId' => $r->query->get('author_id') ?? 'default',
         ]);
@@ -44,8 +45,6 @@ class BookController extends AbstractController
     public function create(Request $r): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-
 
         $authors = $this->getDoctrine()
         ->getRepository(Author::class)
@@ -120,9 +119,7 @@ class BookController extends AbstractController
         $authors = $this->getDoctrine()
         ->getRepository(Author::class)
         ->findAll();
-        
-        $r->getSession()->getFlashBag()->add('success', 'Knyga buvo sekmingai paredaguota.');
-            
+
         return $this->render('book/edit.html.twig', [
             'book' => $book,
             'authors' => $authors
@@ -140,7 +137,12 @@ class BookController extends AbstractController
             $r->getSession()->getFlashBag()->add('errors', 'Blogas Token CSRF');
             return $this->redirectToRoute('book_index');
         }
-        
+
+        if (!is_numeric($r->request->get('book_pages'))) {
+            $r->getSession()->getFlashBag()->add('errors', 'Puslapiai gali būti tik skaičius!');
+            return $this->redirectToRoute('book_index');
+        }
+
         $book = $this->getDoctrine()
         ->getRepository(Book::class)
         ->find($id);
@@ -148,13 +150,6 @@ class BookController extends AbstractController
         $author = $this->getDoctrine()
         ->getRepository(Author::class)
         ->find($r->request->get('books_author'));
-
-        $book
-        ->setTitle($r->request->get('book_title'))
-        ->setIsbn($r->request->get('book_isbn'))
-        ->setPages($r->request->get('book_pages'))
-        ->setShortDescription($r->request->get('book_short_description'))
-        ->setAuthor($author);
 
         $errors = $validator->validate($book);
 
@@ -171,6 +166,15 @@ class BookController extends AbstractController
         if(null === $author) {
             return $this->redirectToRoute('book_create');
         }
+
+        $book
+        ->setTitle($r->request->get('book_title'))
+        ->setIsbn($r->request->get('book_isbn'))
+        ->setPages($r->request->get('book_pages'))
+        ->setShortDescription($r->request->get('book_short_description'))
+        ->setAuthor($author);
+
+
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($book);
